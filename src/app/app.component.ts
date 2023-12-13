@@ -50,13 +50,14 @@ export class AppComponent {
   isLoading: boolean = true;
 
   ngOnInit() {
-    this.eventService.getEvents().subscribe(data => {
-      this.events = data;
-      this.isLoading = false;
-    })
+    this.fetchEvents();
   }
 
   onDateChange() {
+    this.fetchEvents();
+  }
+
+  fetchEvents() {
     this.isLoading = true;
     this.eventService
       .getEvents(this.range.value.start, this.range.value.end)
