@@ -8,6 +8,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatNativeDateModule} from '@angular/material/core';
 import {MatTableModule} from '@angular/material/table';
 import {EventService} from "./event.service";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 
 export interface EventModel {
   title: string,
@@ -28,7 +29,8 @@ export interface EventModel {
     ReactiveFormsModule,
     JsonPipe,
     MatNativeDateModule,
-    MatTableModule
+    MatTableModule,
+    MatProgressSpinnerModule
   ],
   providers: [EventService],
   templateUrl: './app.component.html',
@@ -45,18 +47,22 @@ export class AppComponent {
     start: new FormControl<Date | null>(null),
     end: new FormControl<Date | null>(null),
   });
+  isLoading: boolean = true;
 
   ngOnInit() {
     this.eventService.getEvents().subscribe(data => {
       this.events = data;
+      this.isLoading = false;
     })
   }
 
   onDateChange() {
+    this.isLoading = true;
     this.eventService
       .getEvents(this.range.value.start, this.range.value.end)
       .subscribe(data => {
         this.events = data;
+        this.isLoading = false;
       })
   }
 }
